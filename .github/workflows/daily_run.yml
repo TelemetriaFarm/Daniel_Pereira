@@ -1,0 +1,52 @@
+name: Execução Diária de Telemetria
+
+on:
+  schedule:
+    # Mantive o horário do seu exemplo (06:00 do Mato Grosso / 10:00 UTC)
+    - cron: '0 10 * * *' 
+  workflow_dispatch: # Permite rodar manualmente no botão
+
+permissions:
+  contents: write # Permissão necessária para o JamesIves criar a branch do site
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixar o código
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 2. Instalar o Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # 3. Instalar as bibliotecas
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Executar o script e Preparar a pasta do site
+      - name: Run Python script
+        env:
+          FARM_USER: ${{ secrets.FARM_USER }} # Certifique-se de criar essas Secrets no novo repo
+          FARM_PASS: ${{ secrets.FARM_PASS }}
+        run: |
+          python operacao_github.py
+          
+          # TRUQUE: Cria a pasta 'dist' e move o relatório para lá
+          # Isso garante que a Action abaixo encontre o arquivo certo
+          mkdir dist
+          mv relatorio_telemetria_clima.html dist/
+
+      # 5. Publicar o site (Igual ao seu projeto de clima)
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+          clean: true
