@@ -14,7 +14,7 @@ import sys
 # --- CONFIGURAÇÕES FIXAS (PARA O GITHUB) ---
 GROWER_ID_FIXO = 2917130
 # Dias para analisar para trás (ex: 5 dias)
-DIAS_ANALISE = 1 
+DIAS_ANALISE = 7 
 
 # Dados da Estação (Hardcoded para não precisar subir Excel)
 ESTACOES_FIXAS = [
