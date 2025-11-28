@@ -525,7 +525,7 @@ class AnalisadorTelemetriaClima:
         # Hoje
         hoje = datetime.now()
         # 30 dias atrás
-        inicio = hoje - timedelta(days=30)
+        inicio = hoje - timedelta(days=5)
         
         data_inicio = inicio.strftime('%Y-%m-%d')
         data_fim = hoje.strftime('%Y-%m-%d')
